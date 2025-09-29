@@ -20,11 +20,15 @@ if (!empty($_POST['submit'])) {
         $_SESSION['id'] = $user[0]['id'];
         $_SESSION['message'] = 'Login successful';
 
-        // 👉 Lưu user login vào Redis
+        // THÊM CSRF TOKEN (CHỈ THÊM 2 DÒNG NÀY)
+        // $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        // $_SESSION['csrf_token_time'] = time();
+
+        // luu user login vao Redis
         $redis->set('user:login:' . $user[0]['id'], json_encode($user[0]));
         $redis->expire('user:login:' . $user[0]['id'], 300);
 
-        // 👉 Thêm đoạn JS để lưu Local Storage trên client
+        // Them doan JS de luu Local Storage tren client
         echo "<script>
             localStorage.setItem('user_id', '{$user[0]['id']}');
             localStorage.setItem('username', '{$user[0]['name']}');
